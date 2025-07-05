@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcing.Sample.API", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcing.Sample.Domain", "EventSourcing.Sample.Domain\EventSourcing.Sample.Domain.csproj", "{0A4708F4-380E-40A9-8EC9-1EA43BCB5055}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcing.Sample.Infra", "EventSourcing.Sample.Infra\EventSourcing.Sample.Infra.csproj", "{A5111763-10C1-4C36-BD32-9D7C18C42F78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{0A4708F4-380E-40A9-8EC9-1EA43BCB5055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A4708F4-380E-40A9-8EC9-1EA43BCB5055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A4708F4-380E-40A9-8EC9-1EA43BCB5055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5111763-10C1-4C36-BD32-9D7C18C42F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5111763-10C1-4C36-BD32-9D7C18C42F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5111763-10C1-4C36-BD32-9D7C18C42F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5111763-10C1-4C36-BD32-9D7C18C42F78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
