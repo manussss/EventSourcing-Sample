@@ -1,12 +1,18 @@
 using EventSourcing.Sample.Domain.Contracts;
 using EventSourcing.Sample.Domain.Entities;
 using EventSourcing.Sample.Domain.Events;
+using EventSourcing.Sample.Infra.Data;
+using EventSourcing.Sample.Infra.Stores;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IOrderEventStore, OrderEventStore>();
+builder.Services.AddDbContext<OrderDbContext>(options => options.UseInMemoryDatabase("OrdersEventStore"));
 
 var app = builder.Build();
 

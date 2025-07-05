@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../EventSourcing.Sample.Domain/EventSourcing.Sample.Domain.csproj" />
+    <ProjectReference Include="../EventSourcing.Sample.Infra/EventSourcing.Sample.Infra.csproj" />
   </ItemGroup>
 
 </Project>
