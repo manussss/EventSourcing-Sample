@@ -11,9 +11,9 @@ public class Order
     {
         var order = new Order();
 
-        foreach (var ev in events.OrderBy(e => e.Timestamp))
+        foreach (var @event in events.OrderBy(e => e.Timestamp))
         {
-            switch (ev)
+            switch (@event)
             {
                 case OrderCreated created:
                     order.OrderId = created.OrderId;
@@ -24,6 +24,7 @@ public class Order
                     break;
             }
         }
+        
         return order;
     }
 }

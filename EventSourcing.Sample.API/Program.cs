@@ -1,13 +1,15 @@
+using EventSourcing.Sample.Domain.Contracts;
+using EventSourcing.Sample.Domain.Entities;
+using EventSourcing.Sample.Domain.Events;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +18,53 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/api/v1/orders", async (
+    [FromServices] IOrderEventStore orderEventStore
+) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var orderId = Guid.NewGuid();
+    var @event = new OrderCreated
+    {
+        OrderId = orderId,
+        Data = "{}"
+    };
+    await orderEventStore.AppendEvent(@event);
 
-app.MapGet("/weatherforecast", () =>
+    return Results.Ok(new { orderId });
+});
+
+app.MapPost("/api/v1/orders/{orderId}/confirm", async (
+    [FromServices] IOrderEventStore orderEventStore,
+    Guid orderId
+) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    var events = await orderEventStore.GetEventsForOrder(orderId);
 
-app.Run();
+    var order = Order.RebuildFromEvents(events);
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+    if (order.Status == "Confirmed")
+        return Results.BadRequest("Already confirmed");
+
+    var @event = new OrderConfirmed
+    {
+        OrderId = orderId,
+        Data = "{}"
+    };
+
+    await orderEventStore.AppendEvent(@event);
+
+    return Results.Ok();
+});
+
+app.MapGet("/api/v1/orders/{orderId}", async (
+    [FromServices] IOrderEventStore orderEventStore,
+    Guid orderId
+) =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    var events = await orderEventStore.GetEventsForOrder(orderId);
+    var order = Order.RebuildFromEvents(events);
+
+    return Results.Ok(order);
+});
+
+await app.RunAsync();
